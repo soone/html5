@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>HTML5 Demo - 跳跳熊</title>
+<script language="javascript" src="images/jquery.js"></script>
+<script language="javascript">
+var gameloopId;
+var speed = 3;
+var horizontalSpeed = speed;
+var verticalSpeed = speed;
+var screenWidth;
+var screenHeight;
+var gameRunning = false;
+var ctx;
+var showBounds = false;
+var frameCount = 0;
+var frameCountId;
+var score = 0;
+
+//创建图片
+var mushroomImg = new Image();
+var backgroundForestImg = new Image();
+var bearEyesOpenImg = new Image();
+var bearEyesClosedImg = new Image();
+var flowerImg = new Image();
+var leafImg = new Image();
+var acornImg = new Image();
+var scoreImg = new Image();
+var bonusImg = new Image();
+var owl1 = new Image();
+var owl2 = new Image();
+var multiPoint = 0;
+var currentBonusImage = 0;
+var delayCount = 0;
+var bonusStarted;
+var bonusActive = false;
+
+var BADDY_OFF = 0;
+var BADDY_FLYING = 1;
+var BADDY_HIT = 3;
+var baddyX = 480;
+var baddyStatus = BADDY_OFF;
+var currentBaddyImage = 0;
+var baddyImages = new Array();
+
+var livesImages = new Array();
+var bonusImages = new Array();
+
+var soundType = "wav";
+
+if(navigator.userAgent.toLowerCase().indexOf('chrome') > -1)
+{
+	soundType = "mp3";
+}
+
+//创建和加载声音
+var boing1 = new Audio("sounds/boing_1."+soundType);
+var boing2 = new Audio("sounds/boing_2."+soundType);
+var boing3 = new Audio("sounds/boing_3."+soundType);
+var boing4 = new Audio("sounds/boing_4."+soundType);
+var boing5 = new Audio("sounds/boing_5."+soundType);
+var awwwww = new Audio("sounds/crowdgoan."+soundType);
+var collisionPrize = new Audio("./sounds/collisionPrize."+soundType);
+var collisionStarPrize = new Audio("./sounds/collisionStarPrize."+soundType);
+var groan = new Audio("./sounds/groan."+soundType);
+var newLevel = new Audio("./sounds/newLevel."+soundType);
+var owl = new Audio("./sounds/owl."+soundType);
+var squawk = new Audio("./sounds/squawk."+soundType);
+
+var birds = new Audio("./sounds/birds."+soundType);
+birds.loop = true;
+birds.volume = 0.1;
+
+function GameObject()
+{
+	this.x = 0;
+	this.y = 0;
+	this.image = null;
+}
+
+function Mushroom(){};
+
+$(document).ready(function(){
+	init();
+});
+
+function init()
+{
+	initSettings();
+	loadImages();
+
+	$('#container').mousemove(function(e){
+		mushroomX = e.pageX;
+	});
+
+	$('#ss').click(function(){
+		toggleGameplay();
+	});
+}
+
+function initSettings()
+{
+	//取得画布2d内容触发
+	ctx = document.getElementById('canvas').getContext('2d');
+
+	//
+	screenWidth = parseInt($('#canvas').attr('width'));
+	screenHeight = parseInt($('#canvas').attr('height'));
+
+	mushroomX = parseInt(screenWidth/2);
+	mushroomY = screenHeight - 40;
+}
+
+function loadImages()
+{
+	mushroomImg.src = "images/mushroom.png";
+	backgroundForestImg.src = "images/forest1.jpg";
+	bearEyesOpenImg.src = "images/bear_eyesopen.png";
+	bearEyesClosedImg.src = "images/bear_eyesclosed.png";
+}
+</script>
+<body>
+	<div id="container" style="border:1px solid; width:480px; height:320px;">
+		<canvas id="canvas" width="480" height="320">Oops...好吧，你落伍了，你的浏览器不支持Html5!</canvas>
+	</div>
+	<img id="BtnImgStart" style="position:absolute; left:200px; top:200px; cursor:pointer; float:left;" src="images/START-Button.png" />
+	<div style="clear:left;" id="fps"></div>
+	<input id="showHideBounds" type="button" value="开启/关闭声音"/>
+</body>
+</html>
